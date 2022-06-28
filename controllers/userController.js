@@ -36,7 +36,10 @@ const getSingleUser = async (req, res) => {
 // @route POST /api/users
 const createUser = async (req, res) => {
   try {
-    const user = await User.create(req.body);
+    const user = await User.create({
+      username: req.body.username,
+      email: req.body.email,
+    });
     res.json(user);
   } catch (err) {
     res.status(500).json(err);
