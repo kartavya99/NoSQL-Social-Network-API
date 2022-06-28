@@ -1,4 +1,4 @@
-const { ObjectId } = require("mongoose").Types;
+// const { ObjectId } = require("mongoose");
 const { User, Thought } = require("../models");
 const asyncHandler = require("express-async-handler");
 
@@ -17,6 +17,7 @@ const getAllUsers = (req, res) => {
 };
 
 // Get  - a ingle user by its _id
+
 // Post - a new user
 // ```json
 // example data
@@ -24,6 +25,17 @@ const getAllUsers = (req, res) => {
 //     "username": "lernantino",
 //     "email": "lernantino@gmail.com"
 //   }
+const createUser = (req, res) => {
+  User.create(req.body)
+    .then((user) => {
+      res.json(user);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+};
+
 //PUT - to update a user by its _id
 //DELETE - to remove user byt uts _id
 // **BONUS**: Remove a user's associated thoughts when deleted.
@@ -34,4 +46,5 @@ const getAllUsers = (req, res) => {
 
 module.exports = {
   getAllUsers,
+  createUser,
 };
