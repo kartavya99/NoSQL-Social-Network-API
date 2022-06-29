@@ -55,9 +55,30 @@ const createThought = async (req, res) => {
   }
 };
 
-// * `PUT` to update a thought by its `_id`
+// @desc update thought data
+// @route UPDATE /api/users/:thoughtId
+const updateThought = async (req, res) => {
+  try {
+    const thought = await Thought.findOneAndUpdate({
+      _id: req.params.thoughtId,
+      $set: req.body,
+      // thoughtText: req.body.thoughtText,
+      runValidators: true,
+      new: true,
+    });
 
-// * `DELETE` to remove a thought by its `_id`
+    if (!thought) {
+      res.status(400).json({ message: "No thought with that ID" });
+    }
+    res.status(200).json({ message: "Thought updated" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+};
+
+// @desc delete thought data
+// @route DELETE /api/users/:thoughtId
 
 const deleteThought = async (req, res) => {
   try {
@@ -84,4 +105,5 @@ module.exports = {
   createThought,
   getSingleThought,
   deleteThought,
+  updateThought,
 };

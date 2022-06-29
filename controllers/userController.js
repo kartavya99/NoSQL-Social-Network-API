@@ -3,16 +3,15 @@ const { User, Thought } = require("../models");
 const colors = require("colors");
 const asyncHandler = require("express-async-handler");
 
-// api/users
-// Get - all users
-
 // @desc Get user data
 // @route GET /api/users
 const getAllUsers = async (req, res) => {
   try {
     const user = await User.find();
+
     res.status(200).json(user);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 };
@@ -21,13 +20,16 @@ const getAllUsers = async (req, res) => {
 //@route GET /api/users/userId
 const getSingleUser = async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.params.userId }).select("-__V");
+    const user = await User.findOne({ _id: req.params.userId });
+    // .select("-__V")
+    // .populate("thoughts");
 
     if (!user) {
       res.status(400).json({ message: "No user with that ID" });
     }
     res.status(200).json(user);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 };
@@ -52,6 +54,28 @@ const createUser = async (req, res) => {
 };
 
 //PUT - to update a user by its _id
+// @desc update user data
+// @route UPDATE /api/users/userId
+const updateUser = async (req, res) => {
+  try {
+    const user = await User.findOneAndUpdate({
+      _id: req.params.userId,
+      // //$set: req.body,
+      username: req.body.username,
+      email: req.body.email,
+      runValidators: true,
+      new: true,
+    });
+
+    if (!user) {
+      res.status(404).json({ message: "No use with that ID" });
+    }
+    res.status(200).json({ message: "User updated" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+};
 
 // @desc delete user data
 // @route DELETE /api/users/userId
@@ -98,4 +122,5 @@ module.exports = {
   getSingleUser,
   deleteUser,
   addFriend,
+  updateUser,
 };
