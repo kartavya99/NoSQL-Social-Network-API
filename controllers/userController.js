@@ -58,14 +58,18 @@ const createUser = async (req, res) => {
 // @route UPDATE /api/users/userId
 const updateUser = async (req, res) => {
   try {
-    const user = await User.findOneAndUpdate({
-      _id: req.params.userId,
+    const user = await User.findOneAndUpdate(
+      {
+        _id: req.params.userId,
+      },
+      { $set: req.body },
+      { runValidators: true, new: true }
       // //$set: req.body,
-      username: req.body.username,
-      email: req.body.email,
-      runValidators: true,
-      new: true,
-    });
+      // username: req.body.username,
+      // email: req.body.email,
+      // runValidators: true,
+      // new: true,
+    );
 
     if (!user) {
       res.status(404).json({ message: "No use with that ID" });
@@ -96,6 +100,8 @@ const deleteUser = async (req, res) => {
 // @desc add friend
 // @route :userId/friends/:friendId
 const addFriend = async (req, res) => {
+  console.log("You are adding a Friend".cyan);
+  console.log(req.body);
   try {
     const friend = await User.findOneAndUpdate(
       { _id: req.params.userId },
@@ -136,4 +142,5 @@ module.exports = {
   deleteUser,
   addFriend,
   updateUser,
+  deleteFriend,
 };

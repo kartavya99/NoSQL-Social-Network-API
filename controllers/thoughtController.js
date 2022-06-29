@@ -60,13 +60,14 @@ const createThought = async (req, res) => {
 // @route UPDATE /api/users/:thoughtId
 const updateThought = async (req, res) => {
   try {
-    const thought = await Thought.findOneAndUpdate({
-      _id: req.params.thoughtId,
-      $set: req.body,
+    const thought = await Thought.findOneAndUpdate(
+      {
+        _id: req.params.thoughtId,
+      },
+      { $set: req.body },
       // thoughtText: req.body.thoughtText,
-      runValidators: true,
-      new: true,
-    });
+      { runValidators: true, new: true }
+    );
 
     if (!thought) {
       res.status(400).json({ message: "No thought with that ID" });
