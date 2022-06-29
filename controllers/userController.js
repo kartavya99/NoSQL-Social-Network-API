@@ -72,7 +72,7 @@ const updateUser = async (req, res) => {
     );
 
     if (!user) {
-      res.status(404).json({ message: "No use with that ID" });
+      res.status(400).json({ message: "No use with that ID" });
     }
     res.status(200).json({ message: "User updated" });
   } catch (err) {
@@ -88,7 +88,7 @@ const deleteUser = async (req, res) => {
     const user = await User.findOneAndDelete({ _id: req.params.userId });
 
     if (!user) {
-      res.status(404).json({ message: "No user with that ID" });
+      res.status(400).json({ message: "No user with that ID" });
     }
     res.status(200).json({ message: "User deleted" });
     // **BONUS**: Remove a user's associated thoughts when deleted.
@@ -127,7 +127,7 @@ const deleteFriend = async (req, res) => {
       { runValidators: true, new: true }
     );
     if (!friend) {
-      res.status(404).json({ message: "NP friend found with that ID :( " });
+      res.status(400).json({ message: "No friend found with that ID :( " });
     }
     res.status(200).status({ message: "Friend deleted" });
   } catch (err) {

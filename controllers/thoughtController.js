@@ -89,7 +89,7 @@ const deleteThought = async (req, res) => {
     });
 
     if (!thought) {
-      res.status(404).json({ message: "No thought with that ID" });
+      res.status(400).json({ message: "No thought with that ID" });
     }
     res.status(200).json({ message: "Thought deleted" });
   } catch (err) {
@@ -97,10 +97,46 @@ const deleteThought = async (req, res) => {
   }
 };
 
-// **`/api/thoughts/:thoughtId/reactions`**
+// @desc add reaction
+// route :thoughtId/reactions
+const addReaction = async (req, res) => {
+  console.log("You are adding a reaction".cyan);
+  console.log(req.body);
+  try {
+    const reaction = await Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $addToSet: { reactions: req.body } },
+      { runValidators: true, new: true }
+    );
+    if (!reaction) {
+      res.status(400).json({ message: "No reaction found with that Id" });
+    }
+    res.status(200).json({ message: "reaction added" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+};
 
-// * `POST` to create a reaction stored in a single thought's `reactions` array field
 // * `DELETE` to pull and remove a reaction by the reaction's `reactionId` value
+
+// @desc delete reaction
+// @route :thoughtId/reaction/reactionId
+const deleteReaction = async (req, res) => {
+  try {
+    const reaction = await Thought.findOneAndDelete(
+      { _id: req.params.thoughtId },
+      { $pull: { reactions: req.params.reactionId } },
+      { runValidators: true, new: true }
+    );
+    if (!reaction) {
+      res.status(400).json({ message: "No reaction found with that ID" });
+    }
+    res.status(200).status({ message: "Reaction deleted" });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
 
 module.exports = {
   getAllThoughts,
@@ -108,4 +144,6 @@ module.exports = {
   getSingleThought,
   deleteThought,
   updateThought,
+  addReaction,
+  deleteReaction,
 };
