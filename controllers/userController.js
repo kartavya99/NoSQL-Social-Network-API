@@ -93,28 +93,41 @@ const deleteUser = async (req, res) => {
   }
 };
 
-// **`/api/users/:userId/friends/:friendId`**
-const addFriend = (req, res) => {
-  console.log("You are adding a friend".cyan.underline);
-  console.log(req.body);
-  User.findOneAndUpdate(
-    { _id: req.params.userId },
-    { $addToSet: { friend: req.boyd } },
-    { runValidators: true, new: true }
-  )
-    .then((friend) =>
-      !friend
-        ? res
-            .status(400)
-            .json({ message: "No friend found with that ID :(".cyan })
-        : res.json(student)
-    )
-    .catch((err) => res.status(500).json(err));
+// @desc add friend
+// @route :userId/friends/:friendId
+const addFriend = async (req, res) => {
+  try {
+    const friend = await User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $addToSet: { friends: req.params.friendId } },
+      { runValidators: true, new: true }
+    );
+    if (!friend) {
+      res.status(400).json({ message: "No friend found with that ID :(" });
+    }
+    res.status(200).json({ message: "Friend added" });
+  } catch (err) {
+    res.status(500).json(err);
+  }
 };
 
-// * `POST` to add a new friend to a user's friend list
-
-// * `DELETE` to remove a friend from a user's friend list
+// @desc delete friend
+// @route :userId/friends/:friendId
+const deleteFriend = async (req, res) => {
+  try {
+    const friend = await User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $pull: { friends: req.params.userId } },
+      { runValidators: true, new: true }
+    );
+    if (!friend) {
+      res.status(404).json({ message: "NP friend found with that ID :( " });
+    }
+    res.status(200).status({ message: "Friend deleted" });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
 
 module.exports = {
   getAllUsers,
