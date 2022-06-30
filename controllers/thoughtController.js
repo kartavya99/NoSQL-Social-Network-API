@@ -3,7 +3,6 @@ const { User, Thought } = require("../models");
 
 // @desc get thoughts data
 // @route GET /api/thoughts
-
 const getAllThoughts = async (req, res) => {
   try {
     const thought = await Thought.find();
@@ -31,27 +30,34 @@ const getSingleThought = async (req, res) => {
   }
 };
 
-// * `POST` to create a new thought (don't forget to push the created thought's `_id` to the associated user's `thoughts` array field)
-
-// ```json
-
 // @desc create thought data
 // @route POST /api/thoughts
 const createThought = async (req, res) => {
   try {
-    const thought = await Thought.create({
-      thoughtText: req.body.thoughtText,
-      username: req.body.username,
-      userId: req.body.userId,
-    });
+    const thought = await Thought.create(
+      // { $set: req.body },
+      // { runValidators: true, new: true }
+
+      {
+        thoughtText: req.body.thoughtText,
+        username: req.body.username,
+        userId: req.body.userId,
+      }
+    );
+
+    const user = await User.findOneAndUpdate(
+      { _id: req.body.userId },
+      { $push: { thoughts: thought._id } },
+      { runValidators: true, new: true }
+    );
+
     res.json(thought);
     // // example data to create thought
-    // {
-    //   "thoughtText": "Here's a cool thought...",
+    // {  "thoughtText": "Here's a cool thought...",
     //   "username": "lernantino",
-    //   "userId": "5edff358a0fcb779aa7b118b"
-    // }
+    //   "userId": "5edff358a0fcb779aa7b118b"}
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 };
@@ -81,7 +87,6 @@ const updateThought = async (req, res) => {
 
 // @desc delete thought data
 // @route DELETE /api/users/:thoughtId
-
 const deleteThought = async (req, res) => {
   try {
     const thought = await Thought.findOneAndDelete({
@@ -117,8 +122,6 @@ const addReaction = async (req, res) => {
     res.status(500).json(err);
   }
 };
-
-// * `DELETE` to pull and remove a reaction by the reaction's `reactionId` value
 
 // @desc delete reaction
 // @route :thoughtId/reaction/reactionId

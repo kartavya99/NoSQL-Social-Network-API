@@ -50,14 +50,11 @@ const createUser = async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
     // example data
-    // {
-    //     "username": "lernantino",
-    //     "email": "lernantino@gmail.com"
-    //   }
+    // { "username": "lernantino",
+    //    "email": "lernantino@gmail.com" }
   }
 };
 
-//PUT - to update a user by its _id
 // @desc update user data
 // @route UPDATE /api/users/userId
 const updateUser = async (req, res) => {
@@ -68,7 +65,6 @@ const updateUser = async (req, res) => {
       },
       { $set: req.body },
       { runValidators: true, new: true }
-      // //$set: req.body,
       // username: req.body.username,
       // email: req.body.email,
       // runValidators: true,
@@ -96,6 +92,7 @@ const deleteUser = async (req, res) => {
     }
     res.status(200).json({ message: "User deleted" });
     // **BONUS**: Remove a user's associated thoughts when deleted.
+    await Thought.deleteMany({ _id: { $in: user.thoughts } });
   } catch (err) {
     res.status(500).json(err);
   }
