@@ -7,7 +7,10 @@ const asyncHandler = require("express-async-handler");
 // @route GET /api/users
 const getAllUsers = async (req, res) => {
   try {
-    const user = await User.find();
+    const user = await await User.find()
+      .select("-__V")
+      .populate("thoughts")
+      .populate("friends");
 
     res.status(200).json(user);
   } catch (err) {
@@ -20,9 +23,10 @@ const getAllUsers = async (req, res) => {
 //@route GET /api/users/userId
 const getSingleUser = async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.params.userId });
-    // .select("-__V")
-    // .populate("thoughts");
+    const user = await User.findOne({ _id: req.params.userId })
+      .select("-__V")
+      .populate("thoughts")
+      .populate("friends");
 
     if (!user) {
       res.status(400).json({ message: "No user with that ID" });
