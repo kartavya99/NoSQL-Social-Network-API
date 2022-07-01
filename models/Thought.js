@@ -19,20 +19,16 @@ const thoughtSchema = new Schema(
       type: String,
       required: [true, "Please enter your username"],
     },
-    // * `reactions` (These are like replies)
-    //   * Array of nested documents created with the `reactionSchema`
+
     reactions: [reactionSchema],
   },
   {
-    //getters: true according to mini project
     toJSON: {
       getters: true,
     },
     id: false,
   }
 );
-
-// Create a virtual called `reactionCount` that retrieves the length of the thought's `reactions` array field on query.
 
 thoughtSchema.virtual("reactionCount").get(function () {
   return this.reactions.length;

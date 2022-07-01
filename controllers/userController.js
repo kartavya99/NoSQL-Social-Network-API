@@ -79,7 +79,6 @@ const deleteUser = async (req, res) => {
       res.status(400).json({ message: "No user with that ID" });
     }
     res.status(200).json({ message: "User deleted" });
-    // **BONUS**: Remove a user's associated thoughts when deleted.
     await Thought.deleteMany({ _id: { $in: user.thoughts } });
   } catch (err) {
     res.status(500).json(err);
