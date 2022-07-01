@@ -1,14 +1,12 @@
-const { ObjectId } = require("mongoose");
 const { User, Thought } = require("../models");
 const colors = require("colors");
-const asyncHandler = require("express-async-handler");
 
 // @desc Get user data
 // @route GET /api/users
 const getAllUsers = async (req, res) => {
   try {
     const user = await await User.find()
-      .select("-__V")
+      .select("-__v")
       .populate("thoughts")
       .populate("friends");
 
@@ -24,7 +22,7 @@ const getAllUsers = async (req, res) => {
 const getSingleUser = async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.params.userId })
-      .select("-__V")
+      .select("-__v")
       .populate("thoughts")
       .populate("friends");
 
@@ -42,16 +40,10 @@ const getSingleUser = async (req, res) => {
 // @route POST /api/users
 const createUser = async (req, res) => {
   try {
-    const user = await User.create({
-      username: req.body.username,
-      email: req.body.email,
-    });
+    const user = await User.create(req.body);
     res.json(user);
   } catch (err) {
     res.status(500).json(err);
-    // example data
-    // { "username": "lernantino",
-    //    "email": "lernantino@gmail.com" }
   }
 };
 
@@ -65,10 +57,6 @@ const updateUser = async (req, res) => {
       },
       { $set: req.body },
       { runValidators: true, new: true }
-      // username: req.body.username,
-      // email: req.body.email,
-      // runValidators: true,
-      // new: true,
     );
 
     if (!user) {

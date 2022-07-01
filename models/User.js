@@ -12,9 +12,10 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Please enter an email"],
       unique: true,
-      // match:
-      // [\w._%+-]+@[\w.-]+\.[a-zA-z]{2,4},
-      // "Please enter a valid email address"],
+      match: [
+        /[\w._%+-]+@[\w.-]+\.[a-zA-z]{2,4}/,
+        "Please enter a valid email",
+      ],
     },
     // * `thoughts`
     // * Array of `_id` values referencing the `Thought` model

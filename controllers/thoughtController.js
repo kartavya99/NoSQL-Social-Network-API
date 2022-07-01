@@ -1,4 +1,3 @@
-const { ObjectId } = require("mongoose");
 const { User, Thought } = require("../models");
 
 // @desc get thoughts data
@@ -34,16 +33,7 @@ const getSingleThought = async (req, res) => {
 // @route POST /api/thoughts
 const createThought = async (req, res) => {
   try {
-    const thought = await Thought.create(
-      // { $set: req.body },
-      // { runValidators: true, new: true }
-
-      {
-        thoughtText: req.body.thoughtText,
-        username: req.body.username,
-        userId: req.body.userId,
-      }
-    );
+    const thought = await Thought.create(req.body);
 
     const user = await User.findOneAndUpdate(
       { _id: req.body.userId },
@@ -52,10 +42,6 @@ const createThought = async (req, res) => {
     );
 
     res.json(thought);
-    // // example data to create thought
-    // {  "thoughtText": "Here's a cool thought...",
-    //   "username": "lernantino",
-    //   "userId": "5edff358a0fcb779aa7b118b"}
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
@@ -67,11 +53,8 @@ const createThought = async (req, res) => {
 const updateThought = async (req, res) => {
   try {
     const thought = await Thought.findOneAndUpdate(
-      {
-        _id: req.params.thoughtId,
-      },
+      { _id: req.params.thoughtId },
       { $set: req.body },
-      // thoughtText: req.body.thoughtText,
       { runValidators: true, new: true }
     );
 
