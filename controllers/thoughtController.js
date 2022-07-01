@@ -107,10 +107,10 @@ const addReaction = async (req, res) => {
 };
 
 // @desc delete reaction
-// @route :thoughtId/reaction/reactionId
+// @route :thoughtId/reactions/reactionId
 const deleteReaction = async (req, res) => {
   try {
-    const reaction = await Thought.findOneAndDelete(
+    const reaction = await Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
       { $pull: { reactions: req.params.reactionId } },
       { runValidators: true, new: true }
@@ -118,7 +118,7 @@ const deleteReaction = async (req, res) => {
     if (!reaction) {
       res.status(400).json({ message: "No reaction found with that ID" });
     }
-    res.status(200).status({ message: "Reaction deleted" });
+    res.status(200).json({ message: "Reaction deleted" });
   } catch (err) {
     res.status(500).json(err);
   }

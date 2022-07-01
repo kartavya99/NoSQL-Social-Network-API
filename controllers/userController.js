@@ -90,7 +90,6 @@ const deleteUser = async (req, res) => {
 // @route :userId/friends/:friendId
 const addFriend = async (req, res) => {
   console.log("You are adding a Friend".cyan);
-  console.log(req.body);
   try {
     const friend = await User.findOneAndUpdate(
       { _id: req.params.userId },
@@ -112,13 +111,13 @@ const deleteFriend = async (req, res) => {
   try {
     const friend = await User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $pull: { friends: req.params.userId } },
+      { $pull: { friends: req.params.friendId } },
       { runValidators: true, new: true }
     );
     if (!friend) {
       res.status(400).json({ message: "No friend found with that ID :( " });
     }
-    res.status(200).status({ message: "Friend deleted" });
+    res.status(200).json({ message: "Friend deleted" });
   } catch (err) {
     res.status(500).json(err);
   }
