@@ -49,7 +49,7 @@ const createThought = async (req, res) => {
 };
 
 // @desc update thought data
-// @route UPDATE /api/users/:thoughtId
+// @route UPDATE /api/thoughts/:thoughtId
 const updateThought = async (req, res) => {
   try {
     const thought = await Thought.findOneAndUpdate(
@@ -69,7 +69,7 @@ const updateThought = async (req, res) => {
 };
 
 // @desc delete thought data
-// @route DELETE /api/users/:thoughtId
+// @route DELETE /api/thoughts/:thoughtId
 const deleteThought = async (req, res) => {
   try {
     const thought = await Thought.findOneAndDelete({

@@ -20,15 +20,15 @@ An API for a social network web application with different routes to get, create
 
 # Application Demo
 
-[Social Network API]()
+## Please click on the link for video demo below
+
+## [Social Network API](https://drive.google.com/file/d/1Um5eW8q-2_ecHuoaZBw3onwbk9TGZA-F/view)
 
 # Below are the sample pages of command line application
 
-<img src = "">
+<img src = "public/images/screenshot1.png" width = "400">
 
-<img src = "">
-
-<img src = "">
+<img src = "public/images/screenshot2.png" width = "400">
 
 # Features and Technologies uses
 
